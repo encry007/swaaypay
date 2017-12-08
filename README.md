@@ -1,2 +1,0 @@
-# swaaypay
-reservation site
