@@ -1,0 +1,642 @@
+extends layout
+
+block content
+	script(src="https://unpkg.com/axios/dist/axios.min.js")
+		
+	h4#error_rep.alert.alert-danger
+
+	style.
+		.box{
+			background: rgba(34, 149, 203, 1);
+			display: block;
+			position: relative;
+			top: 10px;
+			padding-left: 60px;
+			padding-right: 60px;
+			padding-top: 50px;
+			padding-bottom: 50px;
+			width: 100%;
+			color: #fff;
+			}
+		#pay{
+			border-radius: 0px;
+
+		}
+		.alert{
+			border-radius: 0px;
+
+		}
+		p, #amountInput{
+			font-size: 12px;
+			background: white;
+			color: rgba(34, 149, 203, 0.9);
+			color: #222;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			padding-left: 5px;
+			padding-right: 5px;
+			height: 50px;
+		}
+		#amt{
+			margin-left: 0px;
+			margin-right: 0px;
+			width: 100%;
+		}
+		#amountInput{
+			border-radius: 0px;
+		}
+
+		b{
+			font-size: 15px;
+		}
+
+		//- .container{
+		//- 	padding-top: 0px;
+		//- 	//- z-index: 0;
+		//- }
+
+		button{
+			z-index: 0;
+		}
+
+		#navigation{
+			width: 100%;
+		}
+		
+		#imageDiv{
+			float: left;
+			width: 400px;
+		}
+
+		#imageDiv2{
+			width: 100%;
+		}
+
+		#uplineInfo{
+			float: left;
+			width: 560px;
+			color: white;
+		}
+
+		#uplineInfoOne{
+			//- float: left;
+			width: 560px;
+			color: white;
+		}
+		//- #upload{
+		//- 	width: 960px;
+		//- }
+		p.x{
+			background-color: #1a80e4;
+			color: white;
+			margin-left: 15px;
+			font-size: 1.3em;
+		}
+		
+		
+		@media screen and (max-width:3000px){
+			#navigation{
+				width: 100%;
+			}
+			#imageDiv{
+				width: 40%;
+			}
+			img{
+				width: 30vw;
+			}
+			#uplineInfo{
+				width: 60%;
+				color: white;
+
+			}
+			#uplineInfoOne{
+				width: 60%;
+				color: white;
+
+			}
+		}
+
+		@media screen and (max-width:1300px){  //- for big tabs down to screens with width greater than 320px
+			#navigation{
+				width: 90vw;
+				margin-left: 2vw;
+				margin-right: 2vw;
+			}
+			#imageDiv{
+				width: 100%;
+			}
+			img{
+				width: 100%;
+			}
+			#uplineInfo{
+				width: 100%;
+				color: white;
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			#uplineInfoOne{
+				width: 100%;
+				color: white;
+				margin-left: 10px;
+			}
+			.col-lg-12.box{
+				width: 90vw;
+			}
+
+		}
+		@media screen and (max-width:400px){
+			#navigation{
+				width: 400px;
+			}
+			
+			#imageDiv{
+				width: 400px;
+			}
+			img{
+				width: 350px;
+			}
+			#uplineInfo{
+				width: 400px;
+				//- height: auto;
+				color: white;
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			#uplineInfoOne{
+				width: 400px;
+				//- height: auto;
+				color: white;
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			.col-lg-12.box{
+				width: 98vw;
+			}
+		}
+
+	
+		//- if imageDiv2 is rendered, the following style would be used!
+
+		@media screen and (max-width:3000px){
+			#navigation{
+				width: 100%;
+			}
+			#imageDiv2{
+				width: 100%;
+			}
+			#uplineInfo{
+				width: 100%;
+				color: white;
+			}
+			#uplineInfoOne{
+				width: 100%;
+				color: white;
+			}
+		}
+
+		@media screen and (max-width:1300px){  //- for big tabs down to screens with width greater than 320px
+			#navigation{
+				width: 90vw;
+				margin-left: 2vw;
+				margin-right: 2vw;
+			}
+			#imageDiv2{
+				width: 100%;
+			}
+			#uplineInfo{
+				width: 100%;
+				color: white;
+				margin-left: 10px;
+				margin-right: 10px;
+
+			}
+			#uplineInfoOne{
+				width: 100%;
+				color: white;
+				margin-left: 10px;
+				margin-right: 10px;
+				
+			}
+
+		}
+		@media screen and (max-width:400px){
+			#navigation{
+				width: 400px;
+			}
+			
+			#imageDiv2{
+				width: 400px;
+			}
+			#uplineInfo{
+				width: 400px;
+				color: white;
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			#uplineInfoOne{
+				width: 400px;
+				color: white;
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			.col-lg-12.box{
+				width: 90vw;
+			}
+		}
+		li{
+			font-size: 1.2em;
+		}
+
+
+	h2 Payment Page
+
+	if user
+		if user.inbox != ''
+			a.btn.btn-info(href='/users/inbox' style='font-size: 1.2em') Please click to check your inbox immediately
+			br
+			br
+				
+		if reserved == 'sent'
+			.row#uplineInfoOne(style='padding-top: 0px;')
+				.col-lg-12.box
+					ol
+						li
+							b Please make your transaction on time before someone else beats you to it!
+						li
+							b Ensure that the amount left after resevation isn't less than C100.
+					br
+					//- img.col-sm-12.col-xs-12.col-md-3.col-lg-3(src='/img/unnamed.jpg' width='120px' height='120px' class='img-circle')
+					p Id : 
+						b#uplineId #{uplineId}
+
+					p Upline Username : 
+						b#uplineUsername #{uplineUsername}
+
+					p Upline Name : 
+						b#uplinName #{uplineFirstname} #{uplineLastname}
+
+					p Phone Number : 
+						b#uplinePhone #{uplinePhone}
+
+					if uplineBankDetails
+						for data, i in uplineBankDetails
+							p Account Holder : 
+								b#accountHolder #{data.accountHolder}
+							p Bankname : 
+								b#bankname #{data.bankname}
+							p Account Number : 
+								b#accountNumber #{data.accountNumber}
+					span Amount available for reservation : 
+						b#realAmount(style='color: white; font-size: 20px;') #{realAmount}
+					input.form-control#amountInput(type='text' placeholder='Enter reservation amount' style='color: black; font-size: 15px')
+					span(id='amountInput_error_message' class='error' style='color:red; font-size: 1.2em;')
+					br
+					br
+					input.btn.btn-large.btn-danger#pay.col-sm-12.col-xs-12(type='button' value='proceed to payment')
+
+		else if reserved == 'navigation'
+			div.row#navigation
+				.row
+					.col-lg-12
+						ol(style='font-size: 1.3em')
+							li CALL your upline before making any payment.
+							li Upload your proof of payment. Such as, bank teller, screenshot of implemented transactions(atm, mobile-transfer e.t.c.).
+							li You have 16HOURS to make your payment to avoid any form of embarassment from your upline and the Admin. Please comply
+							li Make sure the IMAGE is CLEAR enough and LEGITIMATE else, you stand a chance of not being approved by your upline.
+							li If by chance you don't get approved by your upline on time, your Proof Of Payment might be your saving grace.
+							li when it is discovered that your proof of payment is fake and your upline didn't approve of your payment, then it becomes your fault.
+							li If you do not have the wherewithal to pay, DO NOT PLACE A RESERVATION!
+							li Please follow all instructions generously to ensure the smooth running of the system. Cheers...
+						hr
+				.row
+					.col-lg-12
+						if pop == 'yes'
+							div#imageDiv
+								h4 Uploaded Image
+								img(src='https://res.cloudinary.com/encry973r/image/upload/'+image, alt='upload file')
+						else if pop == 'no'
+							p.alert.alert-info(style='margin: 15px;') Upload a proof of payment before your time elapse!
+							h3(style='margin: 15px;') Upline Information.
+							div#uplineInfo(style='margin-right: 15px; background-color: #1a80e4; margin-top: 0px;')
+								p.x Id : 
+									b#uplineId #{uplineId}
+
+								p.x Upline Username : 
+									b#uplineUsername #{uplineUsername}
+
+								p.x Upline Name : 
+									b#uplinName #{uplineFirstname} #{uplineLastname}
+
+								p.x Phone Number : 
+									b#uplinePhone #{uplinePhone}
+
+								if uplineBankDetails
+									for data, i in uplineBankDetails
+										p.x Account Holder : 
+											b#accountHolder #{data.accountHolder}
+										p.x Bankname : 
+											b#bankname #{data.bankname}
+										p.x Account Number : 
+											b#accountNumber #{data.accountNumber}
+				.row
+					.col-lg-12
+						div#upload(style='margin-left: 15px;')
+							if !image
+								h4 Upload Image
+								input.form-control#image.col-lg-4.col-md-6.col-sm-12.col-xs-12(type='file', name='image', placeholder='Upload a file please') 
+								input#val(type='hidden' value=coupleId+'/'+uplineId+'/'+amount)
+								span(id='image_error_message' class='error' style='color: red')
+								br
+								input.btn.btn-primary#up(type='submit', name='submit', value='Save')
+								h5.alert.alert-info#load
+		else if reserved == 'none'
+			div.alert.alert-info(style='color: blue; font-size: 1.5em;')
+				p Sorry, you do not have any outstanding payment for now. 
+					a(href='/users/reservation')
+						b Click to reserve now
+			
+
+	div.modal.fade(tabindex="-1" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						button.close(data-dismiss="modal" aria-hidden="true") &times;
+						h3.modal-title(id="myModalLabel") Reservation Amount status Update
+					div.modal-body 
+						.well
+							p#error.alert.alert-info
+							input.btn.btn-large.btn-block.btn-primary#okay(type="button" class="btn btn-primary" value='Ok')
+					div.modal-footer
+						input.btn.btn-default(type="button" data-dismiss="modal" value='Close')
+
+	script.
+
+		//$(document).ready(function(){
+			$('#amountInput_error_message').hide();
+
+			$('#pay').on('click', function(e){
+				e.preventDefault();
+				var uplineId = $('#uplineId').text();
+				var realAmount = $('#realAmount').text();
+				var realAmountCopy = $('#realAmount').text();
+				var uplineUsername = $('#uplineUsername').text();
+				var amountInput = $('#amountInput').val();
+				var newAmnt ;
+
+				//alert(realAmount);
+
+				var pattern = /^[0-9]+$/i;
+
+				if(!amountInput.match(pattern)){
+					$('#amountInput_error_message').html('Reservation value can only contain numbers');
+					$('#amountInput_error_message').show();
+					err_amountInput = true;
+				}else{
+
+					$('#amountInput_error_message').hide();
+
+					if(realAmount >= 100){
+
+						if(realAmount == amountInput && amountInput <= 1000 && amountInput >= 100){
+
+						//alert(amountInput);
+							//submit();
+							//alert('you cleared quite the stack');
+							//- $('#error').html('you cleared quite the stack');
+							//- $('#myModal').modal();
+							submitReservation(amountInput, uplineId, realAmount)
+
+						}else if (amountInput < 100){
+
+							$('#error').html('Reservation can\'t be less than C100');
+							$('#okay').hide();
+							$('#myModal').modal();
+
+						}else if (amountInput > 1000){
+
+							$('#error').html('Reservation can\'t be more than C1000');
+							$('#okay').hide();
+							$('#myModal').modal();
+
+						}else if ((realAmount - amountInput) >= 100 && amountInput >= 100 && amountInput <= 1000){
+							//submit();
+							//alert('you cleared part');
+							//- $('#error').html('you cleared part');
+							//- $('#myModal').modal();
+							submitReservation(amountInput, uplineId, realAmount) 
+						}else if((realAmount - amountInput) < 100 && (realAmount - amountInput) == 0){
+							//displayError();
+							//alert('amount left can\'t be less than 20000!');
+							$('#error').html('Please reserve someone else as amount left can\'t be less than C100');
+							$('#okay').hide();
+							$('#myModal').modal();
+
+						}else if((realAmount - amountInput) < 100 && (realAmount - amountInput) < 0){
+							//displayError();
+							//alert('amount left can\'t be less than 20000!');
+							$('#error').html('your input can not be greater than C' + realAmount);
+							$('#okay').hide();
+							$('#myModal').modal();
+						}else if((realAmount - amountInput) < 100 && (realAmount - amountInput) > 0){
+							//displayError();
+							//alert('amount left can\'t be less than 20000!');
+							$('#error').html('Amount left can\'t be less than C100. You can reserve the entire C' + realAmount + ' or reserve someone else.');
+							$('#okay').hide();
+							$('#myModal').modal();
+						}else if(amountInput == ''){
+							//alert('can\'t be empty');
+							$('#error').html('can\'t be empty');
+							$('#okay').hide();
+							$('#myModal').modal();
+						}
+
+					}else{
+						//$('#error').html('Sorry, the user has completely been reserved. Kindly pick someone else. Thank you.');
+						alert('Sorry, the user has completely been reserved. Kindly pick someone else. Thank you.');
+						window.location.href = '/users/reservation';
+
+					}
+			}
+
+			});
+
+			function submitReservation(amountInput, uplineId, realAmount){
+				$.post('/users/submitreservation', {amountInput:amountInput, uplineId: uplineId, realAmount: realAmount}, function(response){
+
+					if(response.currentRemainingAmount == 0 || response.currentRemainingAmount < 100){
+						//Refresh
+						$('#error').html(response.status);
+						$('#myModal').modal();
+						$('#okay').on('click', function(e){
+							e.preventDefault();
+							window.location.href = '/users/reservation';
+						});
+						window.location.href = '/users/reservation';
+
+					}else if(amountInput > response.currentRemainingAmount && response.currentRemainingAmount >= 100){
+						$('#realAmount').text(response.currentRemainingAmount);
+						$('#error').html(response.status);
+						$('#okay').hide();
+						$('#myModal').modal();
+						//alert("Equall");
+					}else if(amountInput < response.currentRemainingAmount ){
+						$('#error').html(response.status);
+						$('#myModal').modal();
+						window.location.href = '/users/transactions';
+						$('#okay').on('click', function(e){
+							e.preventDefault();
+							window.location.href = '/users/transactions';
+						});
+
+					}else{
+						window.location.href = '/users/transactions';
+					}
+
+				});
+
+			}
+
+
+
+			
+			var image_name;
+
+			$('#up').hide();
+			$('#load').hide();
+			$('#error_rep').hide();
+			
+			var file_upload = document.getElementById('image');
+
+			if(file_upload){
+				file_upload.addEventListener('change', function(event){
+
+					image = this.files && this.files.length ? this.files[0].name : '';
+
+					var array = image.split('.');
+					var index = -1;
+
+					array.map(function(arr){
+						index++;
+					});
+
+					var ext = array[index].toLowerCase();
+
+					if(ext != 'jpg' && ext != 'jpeg'){
+						$('#image_error_message').html('Only jpeg and jpg image formats are allowed');
+						$('#image_error_message').show();
+						err_image = true;
+					}else{
+						$('#image_error_message').hide();
+						$('#info').html('Success!');
+
+						//pop upload controller
+						var data = document.getElementById('val').value;
+						//alert(data);
+						data = data.split('/');
+						var coupleId = data[0];
+						var uplineId = data[1];
+						var amount = data[2];
+
+						var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/encry973r/upload';
+						var CLOUDINARY_UPLOAD_PRESET =  'sk6ihcgc';
+						
+						var file = event.target.files[0];
+						var formData = new FormData();
+						formData.append('file', file);
+						formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+						
+						$('#load').html('Loading please wait').show();
+						
+						axios({
+							url: CLOUDINARY_URL,
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded',
+							},
+							data: formData
+						}).then(function(res){
+							console.log(res);
+							var image = res.data.secure_url;
+
+							image = image.split('/');
+							var index = -1;
+
+							image.map(function(img){
+								index++;
+							});
+
+							image_name = image[index - 1] + '/' + image[index];
+
+							$('#load').hide();
+							$('#up').show();
+
+							$('#up').on('click', function(res){
+								$.post('/users/upload', {coupleId: coupleId, uplineId: uplineId, amount: amount, image_name: image_name}, function(response){
+									if(response.msg == 'Image upload success!'){
+										$('#load').html(response.msg).show();
+											window.location.href = '/users/payment';
+										}else{
+											$('#error_rep').html(response.msg).show();
+										}
+									
+								});
+							});
+
+						});
+					}
+				});
+			}
+
+			//- var image;
+			//- var data = $('#val').val();
+			//- data = data.split('/');
+			//- //var image = req.body.image; //req.body.files && req.body.files.length ? req.body.files[0].name : '';
+
+			//- var coupleId = data[0];
+			//- var uplineId = data[1];
+			//- var amount = data[2];
+
+			//- $('#image_error_message').hide();
+			//- var err_image = false;
+
+			//- $('#image').change(function(){
+
+			//- 	image = this.files && this.files.length ? this.files[0].name : '';
+
+			//- 	var array = image.split('.');
+			//- 	var index = -1;
+
+			//- 	array.map(function(arr){
+			//- 		index++;
+			//- 	});
+
+			//- 	var ext = array[index].toLowerCase();
+
+			//- 	if(ext != 'jpg' && ext != 'jpeg'){
+			//- 		$('#image_error_message').html('Only jpeg and jpg image formats are allowed');
+			//- 		$('#image_error_message').show();
+			//- 		err_image = true;
+			//- 	}else{
+			//- 		$('#image_error_message').hide();
+			//- 		$('#info').html('Success!');
+
+			//- 		$('#upload').on('click', function(e){
+						
+			//- 			if(err_image == false){
+			//- 				//$('#val').val() = 
+			//- 				return true;
+			//- 				$.post('/users/upload', {coupleId: coupleId, uplineId: uplineId, amount: amount, image: image}, function(response){
+			//- 					alert(response.image);
+			//- 				});
+
+			//- 			}else{
+			//- 				//nothing
+			//- 			}
+
+			//- 		});
+			//- 	}
+			//- });
+
+
+
+		//-});

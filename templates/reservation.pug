@@ -1,0 +1,66 @@
+extends layout
+
+block content
+	h1 Reservation List
+	if user
+		input#hidden(type='hidden' value=user._id)
+
+		table.table.table-bordered
+			thead
+				tr
+					th id
+					th username
+					th amount remaining
+					th Firstname
+					th Action
+			tbody
+				if current_state.state == 'show'
+
+					if user.suspended == true
+						h3(style='color: red') Your account has been suspended. You are not allowed to make/receive any reservation until it is reactivated in #{timeLeft}hrs time.
+					else if user.reactivated == 'no' && deadline == 'Declined'
+						h4.alert.alert-info Your initial transaction was declined by your upline. The admin is currently looking into your transaction.
+					else if deadline == 'Declined' && user.reactivated == 'yes'
+						if reserves
+							each reserve, i in reserves
+								tr
+									td= reserve._id
+									td= reserve.username
+									td(id=i)= reserve.amountRemaining
+									td= reserve.firstname
+									td
+										if reserve.firstname !== user.firstname
+											form(method="POST", action="/users/payment")
+												input(type='hidden' name='input' value=reserve._id+'/'+reserve.amountRemaining+'/'+reserve.username +'/'+reserve.firstname+ '/' + reserve.lastname + '/' + reserve.phone + '/' + reserve.bankDetails+'/'+user.profileUpdated)
+												input.btn.btn-primary#reserve(type='submit' data-id=reserve._id+'/'+reserve.amountRemaining+'/'+reserve.username +'/'+i value='Reserve')
+					else if (deadline == 'Approved' || empty == 'true')
+						if reserves
+							each reserve, i in reserves
+								tr
+									td= reserve._id
+									td= reserve.username
+									td(id=i)= reserve.amountRemaining
+									td= reserve.firstname
+									td
+										if reserve.firstname !== user.firstname
+											form(method="POST", action="/users/payment")
+												input(type='hidden' name='input' value=reserve._id+'/'+reserve.amountRemaining+'/'+reserve.username +'/'+reserve.firstname+ '/' + reserve.lastname + '/' + reserve.phone + '/' + reserve.bankDetails+'/'+user.profileUpdated)
+												input.btn.btn-primary#reserve(type='submit' data-id=reserve._id+'/'+reserve.amountRemaining+'/'+reserve.username +'/'+i value='Reserve')
+					else if deadline == 'Pending' 
+						h4.alert.alert-info You are only allowed to make a single reservation at a time. Upon approval from your upline, you are then eligible to make and receive reservations.
+						if reserves
+							each reserve, i in reserves
+								tr
+									td= reserve._id
+									td= reserve.username
+									td(id=i)= reserve.amountRemaining
+									td= reserve.firstname
+									td Not allowed
+					else if deadline == 'expired'
+						h3 Your time for payment has expired. The admin will look into your transaction soon...
+					//- else if user.suspended == 'true'
+					//- 	h3(style='color: red') Your account has been suspended. You are not allowed to make/receive any reservation until it is reactivated in #{timeLeft}hrs time.
+				else
+					p.alert.alert-info List would be released soon, stay with us...
+						
+		script.

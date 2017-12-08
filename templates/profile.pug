@@ -1,0 +1,523 @@
+extends layout
+
+block content
+	style.
+		.error{
+			color: red;
+			font-size: 1.1em;
+		}
+	if user
+		h3 Your Profile
+
+		if user.inbox != ''
+			a.btn.btn-info(href='/users/inbox' style='font-size: 1.2em') Please click to check your inbox immediately
+			br
+			br
+
+		if user.profileUpdated == 'false'
+			h3.alert.alert-info You need to update your profile info so as to enable you make and receive reservations
+			
+			//- this is needed for both conditions
+		div.row
+			div.col-lg-6
+				div.well
+					div.well-heading
+						h4 Current Profile Info
+					hr
+					div.well-body
+						div.row
+							div.col-lg-12
+								if user
+									h5 Name : 
+										b(style='color: green') #{user.firstname}  #{user.lastname} 
+									h5 Username : 
+										b(style='color: green') #{user.username}
+									h5 Email : 
+										b(style='color: green') #{user.email}
+									h5 Telephone : 
+										b(style='color: green') #{user.phone}
+									if bankDetails
+										each detail, i in bankDetails
+											h5 Account Holder Name : 
+												b(style='color: green') #{detail.accountHolder}
+											h5 Account Number : 
+												b(style='color: green') #{detail.accountNumber}
+											h5 Bankname : 
+												b(style='color: green') #{detail.bankname}
+
+
+			if user.profileUpdated == 'false'
+				div.col-lg-6
+					div.well
+						div.well-heading
+							h4 Update Profile Info
+						hr
+						div.well-body
+							form(method='POST', id='form' action='/users/profile')
+								.form-group
+									label Email
+									input.form-control(type='email', name='email', id='email' required, placeholder='Enter email')
+									span(id='email_error_message' class='error')
+
+								.form-group
+									label Phone
+									input.form-control.fone(type='text', name='phone', required, id='phone', placeholder='Enter phone number' maxlength='11')
+									span(id='phone_error_message' class='error')
+
+								.form-group
+									label Your firstname
+									input.form-control(type='text', name='firstname', id='firstname', required, placeholder='Enter your firstname')
+									span(id='firstname_error_message' class='error')
+
+								.form-group
+									label Your lastname
+									input.form-control(type='text', name='lastname', id='lastname', required, placeholder='Enter your lastname')
+									span(id='lastname_error_message' class='error')
+								hr
+									
+								h5 Bank details
+								.form-group
+									label Account Holder firstname
+									input.form-control(type='text', name='acctFirstName', id='acctFirstName', required, placeholder='Enter Account firstname')
+									span(id='acctFirstName_error_message' class='error')
+								.form-group
+									label Account Holder lastname
+									input.form-control(type='text', name='acctLastName', id='acctLastName', required, placeholder='Enter Account lastname')
+									span(id='acctLastName_error_message' class='error')
+								.form-group
+									label Account Number
+									input.form-control(type='text', name='acctNumber', id='acctNumber', required, placeholder='Enter account number')
+									span(id='acctNumber_error_message' class='error')
+
+								.form-group
+									label Bankname
+										select.form-control(name='bankname', id='bankname')
+											option(name ='Access Bank Ghana' value='Access Bank Ghana') Access Bank Ghana
+											option(name ='ADB Bank  Ghana' value='ADB Bank  Ghana') ADB Bank  Ghana
+											option(name ='Bank of Africa Ghana' value='Bank of Africa Ghana') Bank of Africa Ghana 
+											option(name ='Bank of Baroda Ghana' value='Bank of Baroda Ghana') Bank of Baroda Ghana 
+											option(name ='BSIC Ghana' value='BSIC Ghana') BSIC Ghana 
+											option(name ='Barclays Bank of Ghana' value='Barclays Bank of Ghana') Barclays Bank of Ghana
+											option(name ='CAL Bank Ghana' value='CAL Bank Ghana') CAL Bank Ghana
+											option(name ='Ecobank Bank Ghana' value='Ecobank Bank Ghana') Ecobank Bank Ghana
+											option(name ='Energy Bank Ghana' value='Energy Bank Ghana') Energy Bank Ghana 
+											option(name ='FBN Bank Ghana' value='FBN Bank Ghana') FBN Bank Ghana
+											option(name ='Fidelity Bank Ghana' value='Fidelity Bank Ghana') Fidelity Bank Ghana
+											option(name ='First Atlantic Bank Ghana' value='First Atlantic Bank Ghana') First Atlantic Bank Ghana
+											option(name ='First National Bank Ghana' value='First National Bank Ghana') First National Bank Ghana
+											option(name =' GCB Bank Ghana' value='GCB Bank Ghana') GCB Bank Ghana
+											option(name ='GN Bank Ghana' value='GN Bank Ghana') GN Bank Ghana
+											option(name ='Guarantee Trust Bank Ghana' value='Guarantee Trust Bank Ghana') Guarantee Trust Bank Ghana
+											option(name ='HFC Bank Ghana' value='HFC Bank Ghana') HFC Bank Ghana
+											option(name ='National Investment Bank Ghana' value='National Investment Bank Ghana') National Investment Bank Ghana
+											option(name ='Prudential Bank Ghana' value='Prudential Bank Ghana') Prudential Bank Ghana
+											option(name ='Societe Generale Bank Ghana' value='Societe Generale Bank Ghana') Societe Generale Bank Ghana
+											option(name ='Stanbic Bank Ghana' value='Stanbic Bank Ghana') Stanbic Bank Ghana
+											option(name ='Standard Chartederd Bank Ghana' value='Standard Chartederd Bank Ghana') Standard Chartederd Bank Ghana
+											option(name ='The Royal Bank Ghana' value='The Royal Bank Ghana') The Royal Bank Ghana
+											option(name ='UniBank Ghana' value='UniBank Ghana') UniBank Ghana
+											option(name ='United Bank For Africa Ghana' value='United Bank For Africa Ghana') United Bank For Africa Ghana
+											option(name ='Universal Marchant Bank Ghana' value='Universal Marchant Bank Ghana') Universal Marchant Bank Ghana
+											option(name ='Zenith Bank Ghana' value='Zenith Bank Ghana') Zenith Bank Ghana
+											option(name ='Sovereign Bank Ghana' value='Sovereign Bank Ghana') Sovereign Bank Ghana
+											option(name ='Premium Bank Ghana' value='Premium Bank Ghana') Premium Bank Ghana
+											option(name ='OmniBank Ghana' value='OmniBank Ghana') OmniBank Ghana
+											option(name ='Heritage Bank Ghana' value='Heritage Bank Ghana') Heritage Bank Ghana
+											option(name ='The Construction Bank Ghana' value='The Construction Bank Ghana') The Construction Bank Ghana
+											option(name ='The Beige Bank Ghana' value='The Beige Bank Ghana') The Beige Bank Ghana
+											option(name ='GHL Bank Ghana' value='GHL Bank Ghana') GHL Bank Ghana
+											option(name ='ARB Apex Bank Ghana' value='ARB Apex Bank Ghana') ARB Apex Bank Ghana
+
+									span(id='bankname_error_message' class='error')
+								
+								input.btn.btn-primary.btn-large.btn-block#first(type='submit', name='submit', value='Save')
+										
+			else
+				div.col-lg-6
+					div.well
+						div.well-heading
+							h4 Edit Profile Info
+						hr
+						div.well-body
+							form(method='POST', id='form', action='/users/profile')
+								.form-group
+									label Account Holder firstname
+									input.form-control(type='text', name='acctFirstName', id='acctFirstName' , required, placeholder='Enter Account firstname' maxlength='15')
+									span(id='acctFirstName_error_message' class='error')
+								.form-group
+									label Account Holder lastname
+									input.form-control(type='text', name='acctLastName', id='acctLastName', required, placeholder='Enter Account lastname')
+									span(id='acctLastName_error_message' class='error')
+								.form-group
+									label Account Number
+									input.form-control(type='text', name='acctNumber', id='acctNumber', required, placeholder='Enter account number' maxlength='13')
+									span(id='acctNumber_error_message' class='error')
+								.form-group
+									label Bankname
+										select.form-control(name='bankname', id='bankname')
+											option(name ='Access Bank Ghana' value='Access Bank Ghana') Access Bank Ghana
+											option(name ='ADB Bank  Ghana' value='ADB Bank  Ghana') ADB Bank  Ghana
+											option(name ='Bank of Africa Ghana' value='Bank of Africa Ghana') Bank of Africa Ghana 
+											option(name ='Bank of Baroda Ghana' value='Bank of Baroda Ghana') Bank of Baroda Ghana 
+											option(name ='BSIC Ghana' value='BSIC Ghana') BSIC Ghana 
+											option(name ='Barclays Bank of Ghana' value='Barclays Bank of Ghana') Barclays Bank of Ghana
+											option(name ='CAL Bank Ghana' value='CAL Bank Ghana') CAL Bank Ghana
+											option(name ='Ecobank Bank Ghana' value='Ecobank Bank Ghana') Ecobank Bank Ghana
+											option(name ='Energy Bank Ghana' value='Energy Bank Ghana') Energy Bank Ghana 
+											option(name ='FBN Bank Ghana' value='FBN Bank Ghana') FBN Bank Ghana
+											option(name ='Fidelity Bank Ghana' value='Fidelity Bank Ghana') Fidelity Bank Ghana
+											option(name ='First Atlantic Bank Ghana' value='First Atlantic Bank Ghana') First Atlantic Bank Ghana
+											option(name ='First National Bank Ghana' value='First National Bank Ghana') First National Bank Ghana
+											option(name =' GCB Bank Ghana' value='GCB Bank Ghana') GCB Bank Ghana
+											option(name ='GN Bank Ghana' value='GN Bank Ghana') GN Bank Ghana
+											option(name ='Guarantee Trust Bank Ghana' value='Guarantee Trust Bank Ghana') Guarantee Trust Bank Ghana
+											option(name ='HFC Bank Ghana' value='HFC Bank Ghana') HFC Bank Ghana
+											option(name ='National Investment Bank Ghana' value='National Investment Bank Ghana') National Investment Bank Ghana
+											option(name ='Prudential Bank Ghana' value='Prudential Bank Ghana') Prudential Bank Ghana
+											option(name ='Societe Generale Bank Ghana' value='Societe Generale Bank Ghana') Societe Generale Bank Ghana
+											option(name ='Stanbic Bank Ghana' value='Stanbic Bank Ghana') Stanbic Bank Ghana
+											option(name ='Standard Chartederd Bank Ghana' value='Standard Chartederd Bank Ghana') Standard Chartederd Bank Ghana
+											option(name ='The Royal Bank Ghana' value='The Royal Bank Ghana') The Royal Bank Ghana
+											option(name ='UniBank Ghana' value='UniBank Ghana') UniBank Ghana
+											option(name ='United Bank For Africa Ghana' value='United Bank For Africa Ghana') United Bank For Africa Ghana
+											option(name ='Universal Marchant Bank Ghana' value='Universal Marchant Bank Ghana') Universal Marchant Bank Ghana
+											option(name ='Zenith Bank Ghana' value='Zenith Bank Ghana') Zenith Bank Ghana
+											option(name ='Sovereign Bank Ghana' value='Sovereign Bank Ghana') Sovereign Bank Ghana
+											option(name ='Premium Bank Ghana' value='Premium Bank Ghana') Premium Bank Ghana
+											option(name ='OmniBank Ghana' value='OmniBank Ghana') OmniBank Ghana
+											option(name ='Heritage Bank Ghana' value='Heritage Bank Ghana') Heritage Bank Ghana
+											option(name ='The Construction Bank Ghana' value='The Construction Bank Ghana') The Construction Bank Ghana
+											option(name ='The Beige Bank Ghana' value='The Beige Bank Ghana') The Beige Bank Ghana
+											option(name ='GHL Bank Ghana' value='GHL Bank Ghana') GHL Bank Ghana
+											option(name ='ARB Apex Bank Ghana' value='ARB Apex Bank Ghana') ARB Apex Bank Ghana
+
+									span(id='bankname_error_message' class='error')
+
+								.form-group
+									label Phone
+									input.form-control(type='text', name='phone', id='phone', placeholder='Optional...' maxlength='11')
+									span(id='phone_error_message' class='error')
+								
+								input.btn.btn-primary.btn-large.btn-block#second(type='submit', name='submit', value='Save')
+
+	script.
+		$(document).ready(function(){ //word.replace(/[<>]/g, "")
+			//hide all error spans
+			$('#acctFirstName_error_message').hide();
+			$('#acctLastName_error_message').hide();
+			$('#acctNumber_error_message').hide();
+			$('#phone_error_message').hide();
+			$('#email_error_message').hide();
+			$('#firstname_error_message').hide();
+			$('#lastname_error_message').hide();
+			$('#email_error_message').hide();
+
+			var err_acctFirstName = false;
+			var err_acctLastName = false;
+			var err_acctNumber = false;
+			var err_firstname = false;
+			var err_lastname = false;
+			var err_email = false;
+			var err_phone = false;
+
+			var acctFirstName = $('#acctFirstName').val();
+			var acctLastName = $('#acctLastName').val();
+			var firstname = $('#firstname').val();
+			var lastname = $('#lastname').val();
+			var acctNumber = $('#acctNumber').val();
+			//var bankname = $('#bankname').val();
+			var phone = $('#phone').val();
+			var phoneFlag;
+			
+			
+			$('#email').focusout(function(){
+				validate_email();
+			});
+
+			$('#firstname').focusout(function(){
+				validate_firstname();
+			});
+
+			$('#lastname').focusout(function(){
+				validate_lastname();
+			});
+
+			$('#acctFirstName').focusout(function(){
+				validate_acctFirstName();
+			});
+
+			$('#acctLastName').focusout(function(){
+				validate_acctLastName(); //validate_acctNumber()
+			});
+
+			$('#acctNumber').focusout(function(){
+				validate_acctNumber();
+			});
+
+			//- $('#bankname').focusout(function(){
+			//- 	validate_bankname();
+			//- });
+
+			$('#phone').focusout(function(){
+				validate_phone();
+			});
+
+			function validate_email(){
+				var email = $('#email').val();
+				var pattern = /^[a-zA-Z]/i;
+
+				//check the length of the string
+				if(email.length < 10){
+					$('#email_error_message').html('invalid email');
+					$('#email_error_message').show();
+					err_email = true;
+				}else if(!email[0].match(pattern)){
+				 	$('#email_error_message').html('invalid email');
+				 	$('#email_error_message').show();
+				 	err_email = true;
+				 }else{
+				 	$('#email_error_message').hide();
+					var pattern = new RegExp('^\\d', 'gi');
+					if(email.match(pattern)){
+						$('#email_error_message').html('email can only start with a letter');
+						$('#email_error_message').show();
+						err_email = true;
+					}else{
+						$('#email_error_message').hide();
+						var pattern = /^[a-z0-9\.@]+$/i;
+						if(!email.match(pattern)){
+							$('#email_error_message').html('invalid email address');
+							$('#email_error_message').show();
+							err_email = true;
+						}else{
+							$('#email_error_message').hide();
+						}
+					}
+				 }	
+			}
+
+			function validate_firstname(){
+				var firstname = $('#firstname').val();
+				firstname = firstname.toUpperCase();
+
+				//check the length of the string
+				if(firstname.length < 3){
+				 	$('#firstname_error_message').html('lastname can not be less than 3 characters');
+				 	$('#firstname_error_message').show();
+				 	err_firstname = true;
+				 }else{
+				 	$('#firstName_error_message').hide();
+					var pattern = new RegExp('^\\d', 'gi');
+					if(firstname.match(pattern)){
+						$('#firstname_error_message').html('firstname can only start with a letter');
+						$('#firstname_error_message').show();
+						err_firstname = true;
+					}else{
+						$('#firstname_error_message').hide();
+						var pattern = /^[A-Z]+$/i;
+						if(!firstname.match(pattern)){
+							$('#firstname_error_message').html('firstname can only contain alphabets');
+							$('#firstname_error_message').show();
+							err_firstname = true;
+						}else{
+							$('#firstname_error_message').hide();
+						}
+					}
+				 }	
+			}
+
+			function validate_lastname(){
+
+				var lastname = $('#lastname').val();
+				lastname = lastname.toUpperCase();
+
+				if(lastname.length < 3){
+				 	$('#lastname_error_message').html('lastname can not be less than 3 characters');
+				 	$('#lastname_error_message').show();
+				 	err_lastname = true;
+				 }else{
+				 	$('#lastname_error_message').hide();
+					var pattern = new RegExp('^\\d', 'gi');
+					if(lastname.match(pattern)){
+						$('#lastname_error_message').html('lastname can only start with a letter');
+						$('#lastname_error_message').show();
+						err_lastname = true;
+					}else{
+						$('#lastname_error_message').hide();
+						var pattern = /^[A-Z]+$/i;
+						if(!lastname.match(pattern)){
+							$('#lastname_error_message').html('lastname can only contain alphabets');
+							$('#lastname_error_message').show();
+							err_lastname = true;
+						}else{
+							$('#lastname_error_message').hide();
+						}
+					}
+				 }
+			}
+
+			function validate_acctFirstName(){
+				var acctFirstName = $('#acctFirstName').val();
+				acctFirstName = acctFirstName.toUpperCase();
+
+				//check the length of the string
+				if(acctFirstName.length < 3){
+				 	$('#acctFirstName_error_message').html('lastname can not be less than 3 characters');
+				 	$('#acctFirstName_error_message').show();
+				 	err_acctFirstName = true;
+				 }else{
+				 	$('#acctFirstName_error_message').hide();
+					var pattern = new RegExp('^\\d', 'gi');
+					if(acctFirstName.match(pattern)){
+						$('#acctFirstName_error_message').html('FirstName can only start with a letter');
+						$('#acctFirstName_error_message').show();
+						err_acctFirstName = true;
+					}else{
+						$('#acctFirstName_error_message').hide();
+						var pattern = /^[A-Z]+$/i;
+						if(!acctFirstName.match(pattern)){
+							$('#acctFirstName_error_message').html('FirstName can only contain alphabets');
+							$('#acctFirstName_error_message').show();
+							err_acctFirstName = true;
+						}else{
+							$('#acctFirstName_error_message').hide();
+						}
+					}
+				 }	
+			}
+
+			function validate_acctLastName(){
+
+				var acctLastName = $('#acctLastName').val();
+				acctLastName = acctLastName.toUpperCase();
+
+				if(acctLastName.length < 3){
+				 	$('#acctLastName_error_message').html('lastname can not be less than 3 characters');
+				 	$('#acctLastName_error_message').show();
+				 	err_acctLastName = true;
+				 }else{
+				 	$('#acctLastName_error_message').hide();
+					var pattern = new RegExp('^\\d', 'gi');
+					if(acctLastName.match(pattern)){
+						$('#acctLastName_error_message').html('Name can only start with a letter');
+						$('#acctLastName_error_message').show();
+						err_acctLastName = true;
+					}else{
+						$('#acctLastName_error_message').hide();
+						var pattern = /^[A-Z]+$/i;
+						if(!acctLastName.match(pattern)){
+							$('#acctLastName_error_message').html('Name can only contain alphabets');
+							$('#acctLastName_error_message').show();
+							err_acctLastName = true;
+						}else{
+							$('#acctLastName_error_message').hide();
+						}
+					}
+				 }
+			}
+
+			function validate_acctNumber(){
+				var acctNumber = $('#acctNumber').val();
+				//check the length of the string
+				if(acctNumber.length < 5){
+				 	$('#acctNumber_error_message').html('invalid account number');
+				 	$('#acctNumber_error_message').show();
+				 	err_acctNumber = true;
+				 }else{
+						$('#acctNumber_error_message').hide();
+						var pattern = /^[0-9]+$/i;
+						if(!acctNumber.match(pattern)){
+							$('#acctNumber_error_message').html('Account number can only contain numbers');
+							$('#acctNumber_error_message').show();
+							err_acctNumber = true;
+						}else{
+							$('#acctNumber_error_message').hide();
+						}
+				}
+			}
+
+			//- function validate_bankname(){
+
+			//- 	var bankname = $('#bankname').val();
+			//- 	//check the length of the string
+			//- 	if(bankname.length < 3){
+			//- 	 	$('#bankname_error_message').html('Bankname can only be between 3 to 15 characters long');
+			//- 	 	$('#bankname_error_message').show();
+			//- 	 	err_bankname = true;
+			//- 	 }else{
+			//- 	 	$('#bankname_error_message').hide();
+			//- 		var pattern = new RegExp('^\\d', 'gi');
+			//- 		if(bankname.match(pattern)){
+			//- 			$('#bankname_error_message').html('Bankname can only start with a letter');
+			//- 			$('#bankname_error_message').show();
+			//- 			err_bankname = true;
+			//- 		}else{
+			//- 			$('#bankname_error_message').hide();
+			//- 			var pattern = /^[a-z]+$/i;
+			//- 			if(!bankname.match(pattern)){
+			//- 				$('#bankname_error_message').html('Bankname can only contain alphabets');
+			//- 				$('#bankname_error_message').show();
+			//- 				err_bankname = true;
+			//- 			}else{
+			//- 				$('#bankname_error_message').hide();
+			//- 			}
+			//- 		}
+			//- 	 }
+			//- }
+
+			function validate_phone(){
+
+				var phone = $('#phone').val();
+				//check the length of the string
+				if(phone.length == 0){
+					phoneFlag = 0;
+				}else{
+					if(phone.length < 11){
+					 	$('#phone_error_message').html('Phone number should not be more than 11 characters long');
+					 	$('#phone_error_message').show();
+					 	err_phone = true;
+					 	phoneFlag = -1;
+					 }else{
+
+							$('#phone_error_message').hide();
+							var pattern = /^[0-9]+$/i;
+							if(!phone.match(pattern)){
+								$('#phone_error_message').html('Account number can only contain numbers');
+								$('#phone_error_message').show();
+								err_phone = true;
+								phoneFlag = -1
+							}else{
+								$('#phone_error_message').hide();
+								phoneFlag = 1;
+							}
+					}
+				}
+			}
+
+
+			$('#form').submit(function(){
+
+				err_firstname = false;
+				err_lastname = false;
+				err_acctFirstName = false;
+				err_acctLastName = false;
+				err_acctNumber = false;
+				err_phone = false;
+
+				validate_firstname();
+				validate_lastname();
+				validate_acctFirstName();
+				validate_acctLastName();
+				validate_acctNumber();
+				validate_phone();
+
+				if(err_firstname == false && err_lastname == false && err_acctFirstName == false && err_acctLastName == false && err_acctNumber == false && (phoneFlag == 1 || phoneFlag == 0)){
+					return true;
+				}else{
+					return false;
+				}
+
+
+			});
+				
+		});
