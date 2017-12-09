@@ -1,5 +1,5 @@
 var express = require('express');//
-var port = process.env.PORT || 5000;//
+var port = process.env.PORT || 3000;//
 var http = require('http');
 var morgan = require('morgan');//
 var path = require('path');//
@@ -49,7 +49,7 @@ var app = express();
 app.use(helmet.noCache());
 app.use(csp({
 	directives: {
-		defaultSrc: ["'self'", 'maxcdn.bootstrapcdn.com', 'code.jquery.com', 'unpkg.com' ],
+		defaultSrc: ["'self'", 'maxcdn.bootstrapcdn.com', 'code.jquery.com', 'unpkg.com', 'https://code.jquery.com/jquery-3.2.1.min.js'],
 		styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com', "'unsafe-inline'"],
 		scriptSrc: ["'self'", 'maxcdn.bootstrapcdn.com', 'code.jquery.com', "'unsafe-inline'", 'unpkg.com', 'https://code.jquery.com/jquery-3.2.1.min.js'],
 		imgSrc: ["'self'", 'res.cloudinary.com', 'res.cloudinary.com/encry973r/image/upload/'],
@@ -91,6 +91,7 @@ app.get('/', function (req, res) {
   res.render('index');
 })
 */
+
 //INIT BODY-PARSER
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

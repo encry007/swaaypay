@@ -50,43 +50,43 @@ block content
 				div.col-lg-6
 					div.well
 						div.well-heading
-							h4 Update Profile Info
+							h4 Update Profile Info (Avoid white spaces)
 						hr
 						div.well-body
 							form(method='POST', id='form' action='/users/profile')
 								.form-group
 									label Email
-									input.form-control(type='email', name='email', id='email' required, placeholder='Enter email')
+									input.form-control(type='email', name='email', id='email', placeholder='Enter email')
 									span(id='email_error_message' class='error')
 
 								.form-group
 									label Phone
-									input.form-control.fone(type='text', name='phone', required, id='phone', placeholder='Enter phone number' maxlength='11')
+									input.form-control.fone(type='text', name='phone', id='phone', placeholder='Enter phone number' maxlength='11')
 									span(id='phone_error_message' class='error')
 
 								.form-group
 									label Your firstname
-									input.form-control(type='text', name='firstname', id='firstname', required, placeholder='Enter your firstname')
+									input.form-control(type='text', name='firstname', id='firstname', placeholder='Enter your firstname')
 									span(id='firstname_error_message' class='error')
 
 								.form-group
 									label Your lastname
-									input.form-control(type='text', name='lastname', id='lastname', required, placeholder='Enter your lastname')
+									input.form-control(type='text', name='lastname', id='lastname', placeholder='Enter your lastname')
 									span(id='lastname_error_message' class='error')
 								hr
 									
 								h5 Bank details
 								.form-group
 									label Account Holder firstname
-									input.form-control(type='text', name='acctFirstName', id='acctFirstName', required, placeholder='Enter Account firstname')
+									input.form-control(type='text', name='acctFirstName', id='acctFirstName', placeholder='Enter Account firstname')
 									span(id='acctFirstName_error_message' class='error')
 								.form-group
 									label Account Holder lastname
-									input.form-control(type='text', name='acctLastName', id='acctLastName', required, placeholder='Enter Account lastname')
+									input.form-control(type='text', name='acctLastName', id='acctLastName', placeholder='Enter Account lastname')
 									span(id='acctLastName_error_message' class='error')
 								.form-group
 									label Account Number
-									input.form-control(type='text', name='acctNumber', id='acctNumber', required, placeholder='Enter account number')
+									input.form-control(type='text', name='acctNumber', id='acctNumber', placeholder='Enter account number')
 									span(id='acctNumber_error_message' class='error')
 
 								.form-group
@@ -136,21 +136,22 @@ block content
 				div.col-lg-6
 					div.well
 						div.well-heading
-							h4 Edit Profile Info
+							h3 Edit Profile Info (Avoid white spaces)
 						hr
 						div.well-body
 							form(method='POST', id='form', action='/users/profile')
+								h3 Bank Details
 								.form-group
 									label Account Holder firstname
-									input.form-control(type='text', name='acctFirstName', id='acctFirstName' , required, placeholder='Enter Account firstname' maxlength='15')
+									input.form-control(type='text', name='acctFirstName', id='acctFirstName' , placeholder='Enter Account firstname' maxlength='15')
 									span(id='acctFirstName_error_message' class='error')
 								.form-group
 									label Account Holder lastname
-									input.form-control(type='text', name='acctLastName', id='acctLastName', required, placeholder='Enter Account lastname')
+									input.form-control(type='text', name='acctLastName', id='acctLastName', placeholder='Enter Account lastname')
 									span(id='acctLastName_error_message' class='error')
 								.form-group
 									label Account Number
-									input.form-control(type='text', name='acctNumber', id='acctNumber', required, placeholder='Enter account number' maxlength='13')
+									input.form-control(type='text', name='acctNumber', id='acctNumber', placeholder='Enter account number' maxlength='13')
 									span(id='acctNumber_error_message' class='error')
 								.form-group
 									label Bankname
@@ -197,8 +198,9 @@ block content
 									label Phone
 									input.form-control(type='text', name='phone', id='phone', placeholder='Optional...' maxlength='11')
 									span(id='phone_error_message' class='error')
+
+								input.btn.btn-primary.btn-large.btn-block#second(type='submit', name='submit', value='Save bank details')
 								
-								input.btn.btn-primary.btn-large.btn-block#second(type='submit', name='submit', value='Save')
 
 	script.
 		$(document).ready(function(){ //word.replace(/[<>]/g, "")
@@ -225,9 +227,23 @@ block content
 			var firstname = $('#firstname').val();
 			var lastname = $('#lastname').val();
 			var acctNumber = $('#acctNumber').val();
-			//var bankname = $('#bankname').val();
+			var email = $('#email').val();
 			var phone = $('#phone').val();
-			var phoneFlag;
+
+			//- if(email != undefined && firstname != undefined && lastname != undefined){ //second update form.
+			//- 	alert(email);
+			//- }
+			//var bankname = $('#bankname').val();
+			
+
+			var phoneFlag = 0;
+			var emailFlag = 0;
+			var firstnameFlag = 0;
+			var lastnameFlag = 0;
+			var acctFirstNameFlag = 0;
+			var acctLastNameFlag = 0;
+			var accountNumberFlag = 0;
+			//var banknameFlag = 1; //always present make it dynamic
 			
 			
 			$('#email').focusout(function(){
@@ -271,10 +287,12 @@ block content
 					$('#email_error_message').html('invalid email');
 					$('#email_error_message').show();
 					err_email = true;
+					emailFlag = -1;
 				}else if(!email[0].match(pattern)){
 				 	$('#email_error_message').html('invalid email');
 				 	$('#email_error_message').show();
 				 	err_email = true;
+				 	emailFlag = -1;
 				 }else{
 				 	$('#email_error_message').hide();
 					var pattern = new RegExp('^\\d', 'gi');
@@ -282,6 +300,7 @@ block content
 						$('#email_error_message').html('email can only start with a letter');
 						$('#email_error_message').show();
 						err_email = true;
+						emailFlag = -1;
 					}else{
 						$('#email_error_message').hide();
 						var pattern = /^[a-z0-9\.@]+$/i;
@@ -289,8 +308,10 @@ block content
 							$('#email_error_message').html('invalid email address');
 							$('#email_error_message').show();
 							err_email = true;
+							emailFlag = -1;
 						}else{
 							$('#email_error_message').hide();
+							emailFlag = 1;
 						}
 					}
 				 }	
@@ -305,6 +326,7 @@ block content
 				 	$('#firstname_error_message').html('lastname can not be less than 3 characters');
 				 	$('#firstname_error_message').show();
 				 	err_firstname = true;
+				 	firstnameFlag = -1;
 				 }else{
 				 	$('#firstName_error_message').hide();
 					var pattern = new RegExp('^\\d', 'gi');
@@ -312,6 +334,7 @@ block content
 						$('#firstname_error_message').html('firstname can only start with a letter');
 						$('#firstname_error_message').show();
 						err_firstname = true;
+						firstnameFlag = -1;
 					}else{
 						$('#firstname_error_message').hide();
 						var pattern = /^[A-Z]+$/i;
@@ -319,8 +342,10 @@ block content
 							$('#firstname_error_message').html('firstname can only contain alphabets');
 							$('#firstname_error_message').show();
 							err_firstname = true;
+							firstnameFlag = -1;
 						}else{
 							$('#firstname_error_message').hide();
+							firstnameFlag = 1;
 						}
 					}
 				 }	
@@ -335,6 +360,7 @@ block content
 				 	$('#lastname_error_message').html('lastname can not be less than 3 characters');
 				 	$('#lastname_error_message').show();
 				 	err_lastname = true;
+				 	lastnameFlag = -1;
 				 }else{
 				 	$('#lastname_error_message').hide();
 					var pattern = new RegExp('^\\d', 'gi');
@@ -342,6 +368,7 @@ block content
 						$('#lastname_error_message').html('lastname can only start with a letter');
 						$('#lastname_error_message').show();
 						err_lastname = true;
+						lastnameFlag = -1;
 					}else{
 						$('#lastname_error_message').hide();
 						var pattern = /^[A-Z]+$/i;
@@ -349,8 +376,10 @@ block content
 							$('#lastname_error_message').html('lastname can only contain alphabets');
 							$('#lastname_error_message').show();
 							err_lastname = true;
+							lastnameFlag = -1;
 						}else{
 							$('#lastname_error_message').hide();
+							lastnameFlag = 1;
 						}
 					}
 				 }
@@ -365,6 +394,7 @@ block content
 				 	$('#acctFirstName_error_message').html('lastname can not be less than 3 characters');
 				 	$('#acctFirstName_error_message').show();
 				 	err_acctFirstName = true;
+				 	acctFirstNameFlag = -1;
 				 }else{
 				 	$('#acctFirstName_error_message').hide();
 					var pattern = new RegExp('^\\d', 'gi');
@@ -372,6 +402,7 @@ block content
 						$('#acctFirstName_error_message').html('FirstName can only start with a letter');
 						$('#acctFirstName_error_message').show();
 						err_acctFirstName = true;
+						acctFirstNameFlag = -1;
 					}else{
 						$('#acctFirstName_error_message').hide();
 						var pattern = /^[A-Z]+$/i;
@@ -379,8 +410,10 @@ block content
 							$('#acctFirstName_error_message').html('FirstName can only contain alphabets');
 							$('#acctFirstName_error_message').show();
 							err_acctFirstName = true;
+							acctFirstNameFlag = -1;
 						}else{
 							$('#acctFirstName_error_message').hide();
+							acctFirstNameFlag = 1;
 						}
 					}
 				 }	
@@ -395,6 +428,7 @@ block content
 				 	$('#acctLastName_error_message').html('lastname can not be less than 3 characters');
 				 	$('#acctLastName_error_message').show();
 				 	err_acctLastName = true;
+				 	acctLastNameFlag = -1;
 				 }else{
 				 	$('#acctLastName_error_message').hide();
 					var pattern = new RegExp('^\\d', 'gi');
@@ -402,6 +436,7 @@ block content
 						$('#acctLastName_error_message').html('Name can only start with a letter');
 						$('#acctLastName_error_message').show();
 						err_acctLastName = true;
+						acctLastNameFlag = -1;
 					}else{
 						$('#acctLastName_error_message').hide();
 						var pattern = /^[A-Z]+$/i;
@@ -409,8 +444,10 @@ block content
 							$('#acctLastName_error_message').html('Name can only contain alphabets');
 							$('#acctLastName_error_message').show();
 							err_acctLastName = true;
+							acctLastNameFlag = -1;
 						}else{
 							$('#acctLastName_error_message').hide();
+							acctLastNameFlag = 1;
 						}
 					}
 				 }
@@ -423,6 +460,7 @@ block content
 				 	$('#acctNumber_error_message').html('invalid account number');
 				 	$('#acctNumber_error_message').show();
 				 	err_acctNumber = true;
+				 	accountNumberFlag = -1;
 				 }else{
 						$('#acctNumber_error_message').hide();
 						var pattern = /^[0-9]+$/i;
@@ -430,8 +468,10 @@ block content
 							$('#acctNumber_error_message').html('Account number can only contain numbers');
 							$('#acctNumber_error_message').show();
 							err_acctNumber = true;
+							accountNumberFlag = -1;
 						}else{
 							$('#acctNumber_error_message').hide();
+							accountNumberFlag = 1;
 						}
 				}
 			}
@@ -468,21 +508,26 @@ block content
 			function validate_phone(){
 
 				var phone = $('#phone').val();
+
 				//check the length of the string
-				if(phone.length == 0){
-					phoneFlag = 0;
-				}else{
-					if(phone.length < 11){
-					 	$('#phone_error_message').html('Phone number should not be more than 11 characters long');
-					 	$('#phone_error_message').show();
-					 	err_phone = true;
-					 	phoneFlag = -1;
-					 }else{
+				if(email == undefined){ //second update
+
+					if(phone.length == 0){
+						$('#phone_error_message').hide();
+						phoneFlag = 0;
+
+					}else{
+						if(phone.length < 11 && phone.length != 0){
+						 	$('#phone_error_message').html('Phone number should not be less than 11 characters long');
+						 	$('#phone_error_message').show();
+						 	err_phone = true;
+						 	phoneFlag = -1;
+						 }else if(phone.length == 11){
 
 							$('#phone_error_message').hide();
 							var pattern = /^[0-9]+$/i;
 							if(!phone.match(pattern)){
-								$('#phone_error_message').html('Account number can only contain numbers');
+								$('#phone_error_message').html('Phone number can only contain numbers');
 								$('#phone_error_message').show();
 								err_phone = true;
 								phoneFlag = -1
@@ -490,8 +535,48 @@ block content
 								$('#phone_error_message').hide();
 								phoneFlag = 1;
 							}
+						}else if(phone.length > 11){
+							$('#phone_error_message').html('Phone number can only contain numbers');
+							$('#phone_error_message').show();
+							err_phone = true;
+							phoneFlag = -1;
+						}
 					}
+
+				}else if(email != undefined){ // first update
+					if(phone.length == 0){
+						$('#phone_error_message').html('Phone number cannot be empty').show();
+						phoneFlag = -1;
+
+					}else{
+						if(phone.length < 11 && phone.length != 0){
+						 	$('#phone_error_message').html('Phone number should not be less than 11 characters long');
+						 	$('#phone_error_message').show();
+						 	err_phone = true;
+						 	phoneFlag = -1;
+						 }else if(phone.length == 11){
+
+							$('#phone_error_message').hide();
+							var pattern = /^[0-9]+$/i;
+							if(!phone.match(pattern)){
+								$('#phone_error_message').html('Phone number can only contain numbers');
+								$('#phone_error_message').show();
+								err_phone = true;
+								phoneFlag = -1
+							}else{
+								$('#phone_error_message').hide();
+								phoneFlag = 1;
+							}
+						}else if(phone.length > 11){
+							$('#phone_error_message').html('Phone number can only contain numbers');
+							$('#phone_error_message').show();
+							err_phone = true;
+							phoneFlag = -1;
+						}
+					}
+
 				}
+			
 			}
 
 
@@ -502,19 +587,102 @@ block content
 				err_acctFirstName = false;
 				err_acctLastName = false;
 				err_acctNumber = false;
+				err_email = false;
 				err_phone = false;
 
-				validate_firstname();
-				validate_lastname();
-				validate_acctFirstName();
-				validate_acctLastName();
-				validate_acctNumber();
-				validate_phone();
+				var acctFirstName = $('#acctFirstName').val();
+				var acctLastName = $('#acctLastName').val();
+				var firstname = $('#firstname').val();
+				var lastname = $('#lastname').val();
+				var acctNumber = $('#acctNumber').val();
+				var email = $('#email').val();
+				var phone = $('#phone').val();
 
-				if(err_firstname == false && err_lastname == false && err_acctFirstName == false && err_acctLastName == false && err_acctNumber == false && (phoneFlag == 1 || phoneFlag == 0)){
-					return true;
-				}else{
-					return false;
+				if(email != undefined && firstname != undefined && lastname != undefined){ //first update
+
+					validate_firstname();
+					validate_lastname();
+					validate_acctFirstName();
+					validate_acctLastName();
+					validate_acctNumber();
+					validate_phone();
+					validate_email();
+
+					if(phoneFlag == 1 && emailFlag == 1 && firstnameFlag == 1 && lastnameFlag == 1 && acctFirstNameFlag == 1 && acctLastNameFlag == 1 && accountNumberFlag == 1){
+						//return true;
+						
+						alert('first update with correct fields.');
+						return true;
+
+					}else{
+						//return false;
+						alert('Incorrect input value(s) or empty field(s)');
+						return false;
+
+					}
+
+				}else if(email == undefined && firstname == undefined && lastname == undefined){ //second update
+
+						//no phone update
+						if(phone == '' && acctFirstName != '' && acctLastName != '' && acctNumber != ''){
+
+							validate_acctFirstName();
+							validate_acctLastName();
+							validate_acctNumber();
+
+							if(acctFirstNameFlag == 1 && acctLastNameFlag == 1 && accountNumberFlag == 1){ 
+								//return true;
+								alert('second update with empty phone and correct bankDetails');
+								return true;
+
+								//all field update
+							}else{
+								alert('second update with empty phone an incomplete bank detail');
+								return false;
+							}
+
+						}else if(phone != '' && acctFirstName != '' && acctLastName != '' && acctNumber != ''){
+
+							validate_acctFirstName();
+							validate_acctLastName();
+							validate_acctNumber();
+							validate_phone();
+
+							if(phoneFlag == 1 && acctLastNameFlag == 1 && acctFirstNameFlag == 1 && accountNumberFlag == 1){
+								alert('correct and completely filled fields');
+								return true;
+
+							}else{
+									alert('Ooops! One or more fields are invalid');
+									return false;
+								}
+
+						}else if(phone != '' && acctFirstName == '' && acctLastName == '' && acctNumber == ''){
+						
+							validate_phone();
+
+							if(phoneFlag == 1){
+								//return true;
+								alert('empty bankDetails with valid phone number');
+								return true;
+
+								//all field update
+							}else{
+
+								alert('empty bankDetails with Invalid phone number');
+								return false;
+							}
+
+
+						}else if(phone == '' && acctFirstName == '' && acctLastName == '' && acctNumber == ''){
+
+							alert('All fields are completely empty');
+							return false;
+
+						}else{
+							alert('Fill all required fields');
+							return false;
+						}
 				}
 
 

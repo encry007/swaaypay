@@ -58,76 +58,76 @@ function needsGroup(req, res, next){
 	router.post('/login', needsGroup, adminController.login_admin);
 
 		//log out admin
-	router.get('/logout', ensureAuthenticated, adminController.logout_admin);
+	router.get('/logout', needsGroup, ensureAuthenticated, adminController.logout_admin);
 
 		//load dashboard
-	router.get('/dashboard', ensureAuthenticated, adminController.get_admin_dashboard);
+	router.get('/dashboard', needsGroup, ensureAuthenticated, adminController.get_admin_dashboard);
 
 		//load reservation list
-	router.get('/reservation', ensureAuthenticated, adminController.get_admin_reservation_list);
+	router.get('/reservation', needsGroup, ensureAuthenticated, adminController.get_admin_reservation_list);
 
 	//load reservation list
-	router.post('/publish', ensureAuthenticated, adminController.publish_list);
+	router.post('/publish', needsGroup, ensureAuthenticated, adminController.publish_list);
 
 	//load reservation list
-	router.post('/withdraw', ensureAuthenticated, adminController.withdraw_list);
+	router.post('/withdraw', needsGroup, ensureAuthenticated, adminController.withdraw_list);
 
 	//approve downline
-	router.post('/approvedownline', ensureAuthenticated, adminController.approve_admin_downline);
+	router.post('/approvedownline', needsGroup, ensureAuthenticated, adminController.approve_admin_downline);
 
 	//approve downline
-	router.post('/approve-declined', ensureAuthenticated, adminController.approve_declined_downline);
+	router.post('/approve-declined', needsGroup, ensureAuthenticated, adminController.approve_declined_downline);
 
 	//approve downline
-	router.post('/decline-declined', ensureAuthenticated, adminController.decline_declined_downline);
+	router.post('/decline-declined', needsGroup, ensureAuthenticated, adminController.decline_declined_downline);
 
 		//decline downline
-	router.post('/declinedownline', ensureAuthenticated, adminController.decline_admin_downline);
+	router.post('/declinedownline', needsGroup, ensureAuthenticated, adminController.decline_admin_downline);
 
 	//approve-purged
-	router.post('/approve-purged', ensureAuthenticated, adminController.approve_purged_downline);
+	router.post('/approve-purged', needsGroup, ensureAuthenticated, adminController.approve_purged_downline);
 
 	//decline downline
-	router.post('/decline-purged', ensureAuthenticated, adminController.decline_purged_downline);
+	router.post('/decline-purged', needsGroup, ensureAuthenticated, adminController.decline_purged_downline);
 
 		//load profile
-	router.get('/profile', ensureAuthenticated, adminController.get_admin_profile);
+	router.get('/profile', needsGroup, ensureAuthenticated, adminController.get_admin_profile);
 
 		//update profile
-	router.post('/profile', ensureAuthenticated, adminController.update_admin_profile);
+	router.post('/profile', needsGroup, ensureAuthenticated, adminController.update_admin_profile);
 
 	//load transactions
-	router.get('/transactions', ensureAuthenticated, adminController.get_admin_transactions);
+	router.get('/transactions', needsGroup, ensureAuthenticated, adminController.get_admin_transactions);
 
 	//get all registered users
-	router.get('/users', ensureAuthenticated, adminController.get_all_registered_users);
+	router.get('/users', needsGroup, ensureAuthenticated, adminController.get_all_registered_users);
 
 	//get all registered admins
-	router.get('/admins', ensureAuthenticated, adminController.get_all_registered_admins);
+	router.get('/admins', needsGroup, ensureAuthenticated, adminController.get_all_registered_admins);
 	//update-amount-remaining
 
 	//get all registered admins
-	router.post('/admins/update-amount-remaining', ensureAuthenticated, adminController.update_admin_amount_remaining);
+	router.post('/admins/update-amount-remaining', needsGroup, ensureAuthenticated, adminController.update_admin_amount_remaining);
 
 	//get all registered admins
-	router.get('/complaints', ensureAuthenticated, adminController.get_all_complaints);
+	router.get('/complaints', needsGroup, ensureAuthenticated, adminController.get_all_complaints);
 
 	//get all declined transactions
-	router.get('/declined-transactions', ensureAuthenticated, adminController.get_all_declined_transactions);
+	router.get('/declined-transactions', needsGroup, ensureAuthenticated, adminController.get_all_declined_transactions);
 
 	//get all declined transactions
-	router.get('/testimonies', ensureAuthenticated, adminController.get_all_testimonies);
+	router.get('/testimonies', needsGroup, ensureAuthenticated, adminController.get_all_testimonies);
 
 	//get all declined transactions
-	router.post('/reactivate-account', ensureAuthenticated, adminController.reactivate_account);
+	router.post('/reactivate-account', needsGroup, ensureAuthenticated, adminController.reactivate_account);
 
 	//get all declined transactions
-	router.get('/purge', ensureAuthenticated, adminController.get_purge_page); //get purge page so as to enable you purge defaulters
+	router.get('/purge', needsGroup, ensureAuthenticated, adminController.get_purge_page); //get purge page so as to enable you purge defaulters
 	
 	//get all declined transactions
-	router.post('/purge', ensureAuthenticated, adminController.purge); // Purge deafulters
+	router.post('/purge', needsGroup, ensureAuthenticated, adminController.purge); // Purge deafulters
 
 	//get all declined transactions
-	router.get('/purged-accounts', ensureAuthenticated, adminController.get_purged_accounts_page); // Purge deafulters
+	router.get('/purged-accounts', needsGroup, ensureAuthenticated, adminController.get_purged_accounts_page); // Purge deafulters
 
 	module.exports = router;

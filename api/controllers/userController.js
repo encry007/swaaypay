@@ -774,7 +774,7 @@ exports.decline_downline = function(req, res, next){
 
 // get profile
 exports.get_profile = function(req, res, next){
-	res.render('profile'/*, {bankDetails: req.user.bankDetails, profileUpdated: req.user.profileUpdated}*/);
+	res.render('profile', {bankDetails: req.user.bankDetails, profileUpdated: req.user.profileUpdated});
 	//next();
 };
 
@@ -801,8 +801,17 @@ exports.update_profile = function(req, res, next){
 				//console.log(updated);
 				if(err){
 					console.log(err);
-					return res.send({msg: 'Ooops. Something went wrong...'}) ;
+					return;
+					// return res.send({msg: 'Ooops. Something went wrong...'}) ;
 				}
+
+				if(!updated){
+						req.flash('info', 'Something went wrong with your profile update...1');
+						res.redirect('/users/profile');
+				}
+
+				// req.flash('success', 'profile updated...');
+				// res.redirect('/users/profile');
 
 			});
 	}else{
@@ -814,30 +823,71 @@ exports.update_profile = function(req, res, next){
 		const id = req.user._id;
 		const phone = req.body.phone;
 
-		if(phone == ''){
+		if(phone == '' && acctFirstName != '' && acctLastName != '' && acctNumber != ''){ //bank update only
 			User.update({_id: id}, {$set: { bankDetails: {
 											accountHolder: accountHolder, bankname: bankname, accountNumber: acctNumber}}})
 				.then(function(err, updated){
 					if(err){
 						console.log(err);
-						return res.send({msg: 'Ooops. Something went wrong...'});
+						return ;
+						// req.flash('warning', 'something went wrong');
+						// return res.render('profile');
 					}
-				});
-		}else{
 
+					if(!updated){
+						req.flash('warning', 'Something went wrong with your profile update...1');
+						res.redirect('/users/profile');
+					}
+
+					// req.flash('success', 'profile updated...');
+					// res.redirect('/users/profile');
+
+				});
+		}else if(phone != '' && acctFirstName != '' && acctLastName != '' && acctNumber != ''){
 			User.update({_id: id}, {$set: { phone: phone, bankDetails: {
 											accountHolder: accountHolder, bankname: bankname, accountNumber: acctNumber}}})
 				.then(function(err, updated){
 					if(err){
 						console.log(err);
-						return res.send({msg: 'Ooops. Something went wrong...'});
+						return;
+						/*req.flash('warning', 'something went wrong');
+						return res.render('profile');*/
 					}
-				});
-		}
-	}
 
-	req.flash('success', 'Profile Updated...');
-	return res.redirect('/users/profile');
+					if(!updated){
+						req.flash('warning', 'Something went wrong with your profile update... 2');
+						res.redirect('/users/profile');
+					}
+
+					// req.flash('success', 'profile updated...');
+					// res.redirect('/users/profile');
+				});
+
+		}else if(phone != '' && acctFirstName == '' && acctLastName == '' && acctNumber == ''){
+			User.update({_id: id}, {$set: { phone: phone}})
+				.then(function(err, updated){
+					if(err){
+						console.log(err);
+						return ;
+						// req.flash('warning', 'something went wrong');
+						// return res.render('profile');
+					}
+
+					if(!updated){
+						req.flash('warning', 'Something went wrong with your profile update...3');
+						res.redirect('/users/profile');
+					}
+
+				});
+		}else{
+
+				req.flash('warning', 'Fill the required field with valid input');
+				res.redirect('/users/profile');
+		}
+
+		req.flash('success', 'profile updated...');
+		res.redirect('/users/profile');
+	}
 };
 
 // get blog
